@@ -19,10 +19,8 @@ func main() {
 
 	// body := []byte{}
 	body := make([]byte, 99999)
-	// why 99999? because the body is a stream of data and we need to read it all, if we don't know the size of the body, we can use make([]byte, 0) and read it until the end of the stream
-	// but in this case we know the size of the body, so we can use make([]byte, 99999)
-	// so we can read the body until the end of the stream
-	// otherwise we will get a partial body
+	// why 99999? because the reader is a stream of data and we need to read it all, if we don't know the size of the body, we can use make([]byte, 0) and read it until the end of the stream
+	// if we put any smaller value, we will get a partial body
 
 	resp.Body.Read(body)
 
