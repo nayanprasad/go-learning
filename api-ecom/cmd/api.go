@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -29,7 +29,7 @@ func (app *appplication) run(h http.Handler) error {
 		Addr:    app.config.addr,
 		Handler: h,
 	}
-	log.Printf("Server has started on port: %s ", app.config.addr)
+	slog.Info("Server has started", "port", app.config.addr)
 	return svr.ListenAndServe()
 }
 
