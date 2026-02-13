@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-ecom/internal/product"
 	"log/slog"
 	"net/http"
 
@@ -16,10 +17,15 @@ type appplication struct {
 
 func (*appplication) mount() http.Handler {
 	r := chi.NewRouter()
+
 	r.Use(middleware.Logger)
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World!"))
 	})
+
+	productHanlder := product.NewHandler(nil)
+	r.Get("/products", productHanlder.ListProducts)
 
 	return r
 }
