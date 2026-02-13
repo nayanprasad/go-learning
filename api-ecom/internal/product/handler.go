@@ -1,7 +1,7 @@
 package product
 
 import (
-	"encoding/json"
+	"api-ecom/internal/json"
 	"net/http"
 )
 
@@ -19,6 +19,5 @@ func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
 
 	p := []string{"mobile", "tws"}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(p)
+	json.Write(w, http.StatusOK, p)
 }
