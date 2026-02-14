@@ -35,6 +35,7 @@ func main() {
 
 	api := appplication{
 		config: cnf,
+		db:     conn,
 	}
 
 	h := api.mount()

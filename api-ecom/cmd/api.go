@@ -5,17 +5,20 @@ import (
 	"log/slog"
 	"net/http"
 
+	repo "api-ecom/internal/adapters/psql/sqlc"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/jackc/pgx/v5"
 )
 
 type appplication struct {
 	config config
 	//logger
-	//db driver
+	db *pgx.Conn
 }
 
-func (*appplication) mount() http.Handler {
+func (app *appplication) mount() http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -24,7 +27,7 @@ func (*appplication) mount() http.Handler {
 		w.Write([]byte("Hello World!"))
 	})
 
-	productService := product.NewService()
+	productService := product.NewService(repo.New(app.db))
 	productHanlder := product.NewHandler(productService)
 	r.Get("/products", productHanlder.ListProducts)
 
