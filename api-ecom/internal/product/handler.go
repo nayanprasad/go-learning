@@ -39,8 +39,6 @@ func (h *handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//validate here
-
 	p, err := h.service.CreateProduct(r.Context(), createProductParams)
 
 	if err != nil {

@@ -2,6 +2,8 @@ package product
 
 import (
 	"context"
+	"errors"
+	"log/slog"
 
 	repo "api-ecom/internal/adapters/psql/sqlc"
 )
@@ -26,5 +28,11 @@ func (svc *svc) ListProducts(ctx context.Context) ([]repo.Product, error) {
 }
 
 func (svc *svc) CreateProduct(ctx context.Context, arg repo.CreateProductParams) (repo.Product, error) {
+
+	if arg.Name == "" {
+		slog.Error("Name canot be empty")
+		return repo.Product{}, errors.New("Name canot be empty")
+	}
+
 	return svc.repo.CreateProduct(ctx, arg)
 }
