@@ -9,6 +9,50 @@ import (
 	"context"
 )
 
+const crateOrder = `-- name: CrateOrder :one
+insert into orders(user_id)
+values ($1)
+RETURNING id, user_id, created_at
+`
+
+func (q *Queries) CrateOrder(ctx context.Context, userID int64) (Order, error) {
+	row := q.db.QueryRow(ctx, crateOrder, userID)
+	var i Order
+	err := row.Scan(&i.ID, &i.UserID, &i.CreatedAt)
+	return i, err
+}
+
+const crateOrderItems = `-- name: CrateOrderItems :one
+insert into order_items(order_id, product_id, price, quantity)
+values ($1, $2, $3, $4)
+RETURNING id, order_id, product_id, price, quantity
+`
+
+type CrateOrderItemsParams struct {
+	OrderID   int64 `json:"order_id"`
+	ProductID int64 `json:"product_id"`
+	Price     int32 `json:"price"`
+	Quantity  int32 `json:"quantity"`
+}
+
+func (q *Queries) CrateOrderItems(ctx context.Context, arg CrateOrderItemsParams) (OrderItem, error) {
+	row := q.db.QueryRow(ctx, crateOrderItems,
+		arg.OrderID,
+		arg.ProductID,
+		arg.Price,
+		arg.Quantity,
+	)
+	var i OrderItem
+	err := row.Scan(
+		&i.ID,
+		&i.OrderID,
+		&i.ProductID,
+		&i.Price,
+		&i.Quantity,
+	)
+	return i, err
+}
+
 const createProduct = `-- name: CreateProduct :one
 INSERT INTO products (name, price, quantity)
 VALUES ($1, $2, $3)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-ecom/internal/order"
 	"api-ecom/internal/product"
 	"log/slog"
 	"net/http"
@@ -31,6 +32,10 @@ func (app *appplication) mount() http.Handler {
 	productHanlder := product.NewHandler(productService)
 	r.Get("/products", productHanlder.ListProducts)
 	r.Post("/product/create", productHanlder.CreateProduct)
+
+	orderService := order.NewService(repo.New(app.db), app.db)
+	orderHandler := order.NewHandler(orderService)
+	r.Post("/order", orderHandler.PlaceOrder)
 
 	return r
 }

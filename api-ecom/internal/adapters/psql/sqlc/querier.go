@@ -9,6 +9,8 @@ import (
 )
 
 type Querier interface {
+	CrateOrder(ctx context.Context, userID int64) (Order, error)
+	CrateOrderItems(ctx context.Context, arg CrateOrderItemsParams) (OrderItem, error)
 	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
 	DeleteProductById(ctx context.Context, id int64) error
 	GetProductById(ctx context.Context, id int64) (Product, error)
